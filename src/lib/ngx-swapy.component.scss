@@ -1,0 +1,39 @@
+.om-swapy {
+    .om-swapy-invisible {
+        width: 0;
+        height: 0;
+        display: none;
+        pointer-events: none;
+    }
+
+    .om-swapy-container {
+        position: relative;
+        z-index: 10;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .om-swapy-section {
+        border-radius: 20px;
+        transition: background-color .4s ease;
+
+        &[data-swapy-highlighted] {
+            background-color: #0003;
+        }
+
+        .om-swapy-item {
+            width: 100%;
+            height: 100%;
+            will-change: transform;
+            cursor: pointer;
+            -moz-user-select: none;
+            user-select: none;
+            -webkit-user-select: none;
+
+            &.disabled {
+                cursor: default;
+            }
+        }
+    }
+}
