@@ -51,7 +51,6 @@ export class NgxSwapyComponent implements AfterViewInit, OnDestroy {
     }
 
     this.swapElements = this.swapElementRefs?.toArray().map((ref) => {
-      console.log(ref.nativeElement.outerHTML);
       return {
         uuids: [
           this.generateUUID(),
