@@ -1,7 +1,7 @@
 {
   "name": "@omnedia/ngx-swapy",
   "description": "A simple component library to get a drag and drop DOM through the help of Swapy.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "peerDependencies": {
     "@angular/common": "^18.2.0",
     "@angular/core": "^18.2.0",
