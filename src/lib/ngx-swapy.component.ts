@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ContentChildren,
   ElementRef,
@@ -60,7 +61,10 @@ export class NgxSwapyComponent implements AfterViewInit, OnDestroy {
 
   private domChangeObserver?: MutationObserver;
 
-  constructor(private readonly sanitizer: DomSanitizer) {}
+  constructor(
+    private readonly sanitizer: DomSanitizer,
+    private readonly changeDetectorRef: ChangeDetectorRef,
+  ) {}
 
   ngAfterViewInit(): void {
     if (!this.swapElementRefs) {
@@ -81,6 +85,8 @@ export class NgxSwapyComponent implements AfterViewInit, OnDestroy {
     this.domChangeObserver.observe(this.containerRef.nativeElement, {
       childList: true,
     });
+
+    this.changeDetectorRef.detectChanges();
   }
 
   ngOnDestroy(): void {
