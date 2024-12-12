@@ -1,5 +1,13 @@
 # ngx-swapy
 
+<a href="https://ngxui.com" target="_blank" style="display: flex;gap: .5rem;align-items: center;cursor: pointer; padding: 0 0 0 0; height: fit-content;">
+  <img src="https://ngxui.com/assets/img/ngxui-logo.png" style="width: 64px;height: 64px;">
+  <p style="font-weight: bold; padding: 0; margin: 0; font-size: 4rem">NGXUI</p>
+</a>
+
+This Library is part of the NGXUI ecosystem. <br>
+View all available components at https://ngxui.com
+
 `@omnedia/ngx-swapy` is an Angular library that provides a dynamic swapping mechanism for content elements. This component allows you to swap content interactively with smooth animations, customizable settings, and event handling. It is perfect for creating interactive UIs, dashboards, or content games.
 
 ## Features
@@ -22,21 +30,23 @@ npm install @omnedia/ngx-swapy swapy
 Import the `NgxSwapyComponent` in your Angular module or component:
 
 ```typescript
-import { NgxSwapyComponent } from '@omnedia/ngx-swapy';
+import {NgxSwapyComponent} from '@omnedia/ngx-swapy';
 
 @Component({
   ...
-  imports: [
-    ...
-    NgxSwapyComponent,
-  ],
+    imports:
+[
   ...
+    NgxSwapyComponent,
+],
+...
 })
 ```
 
 Use the component in your template:
 
 ```html
+
 <om-swapy [swapyConfig]="{ animation: 'dynamic', continuousMode: true }" [disableSwap]="false" styleClass="custom-swapy">
   <div #OmSwapyContent class="content-1">
     Content 1
@@ -60,6 +70,7 @@ Use the component in your template:
 In this example, the custom-swapy style class is used to customize the appearance of the swapping container. Meanwhile, each content item retains the styles applied within the parent component.
 
 ```html
+
 <om-swapy styleClass="swapy-container" [disableSwap]="false">
   <div class="section-a" #OmSwapyContent>
     Section A
@@ -105,6 +116,7 @@ In this example, the custom-swapy style class is used to customize the appearanc
 ## Component API
 
 ```html
+
 <om-swapy
   [swapyConfig]="swapyConfig"
   [disableSwap]="disableSwap"
@@ -123,6 +135,7 @@ In this example, the custom-swapy style class is used to customize the appearanc
 ## Example
 
 ```html
+
 <om-swapy [swapyConfig]="{ animation: 'spring', continuousMode: false }" (onSwap)="onSwapEvent($event)">
   <div class="card" #OmSwapyContent>
     Card 1
