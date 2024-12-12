@@ -2,7 +2,6 @@
 
 <a href="https://ngxui.com" target="_blank" style="display: flex;gap: .5rem;align-items: center;cursor: pointer; padding: 0 0 0 0; height: fit-content;">
   <img src="https://ngxui.com/assets/img/ngxui-logo.png" style="width: 64px;height: 64px;">
-  <p style="font-weight: bold; padding: 0; margin: 0; font-size: 4rem">NGXUI</p>
 </a>
 
 This Library is part of the NGXUI ecosystem. <br>
