@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+import {CommonModule} from "@angular/common";
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -12,13 +12,9 @@ import {
   QueryList,
   ViewChild,
 } from "@angular/core";
-import {
-  Config,
-  SwapEventDataData,
-  SwapyContentElement,
-} from "./ngx-swapy.types";
-import { createSwapy, Swapy } from "swapy";
-import { DomSanitizer } from "@angular/platform-browser";
+import {Config, SwapEventDataData, SwapyApi, SwapyContentElement,} from "./ngx-swapy.types";
+import {createSwapy} from "swapy";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: "om-swapy",
@@ -57,14 +53,15 @@ export class NgxSwapyComponent implements AfterViewInit, OnDestroy {
 
   swapElements: SwapyContentElement[] = [];
 
-  private swapyApi?: Swapy;
+  private swapyApi?: SwapyApi;
 
   private domChangeObserver?: MutationObserver;
 
   constructor(
     private readonly sanitizer: DomSanitizer,
     private readonly changeDetectorRef: ChangeDetectorRef,
-  ) {}
+  ) {
+  }
 
   ngAfterViewInit(): void {
     if (!this.swapElementRefs) {

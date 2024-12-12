@@ -1,4 +1,14 @@
-import { SafeHtml } from "@angular/platform-browser";
+import {SafeHtml} from "@angular/platform-browser";
+
+export type SwapyApi = {
+  onSwap(callback: SwapCallback): void;
+  enable(enabled: boolean): void;
+}
+
+export type SwapCallback = (event: SwapEventData) => void;
+export type SwapEventData = {
+  data: SwapEventDataData;
+}
 
 export type SwapyContentElement = {
   uuids: string[];
