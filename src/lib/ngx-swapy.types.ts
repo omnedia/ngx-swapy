@@ -1,38 +1,12 @@
-import {SafeHtml} from "@angular/platform-browser";
-
-export type SwapyApi = {
-  onSwap(callback: SwapCallback): void;
-  enable(enabled: boolean): void;
-}
-
-export type SwapCallback = (event: SwapEventData) => void;
-export type SwapEventData = {
-  data: SwapEventDataData;
-}
+import {TemplateRef} from '@angular/core';
+import {SwapEvent} from 'swapy';
 
 export type SwapyContentElement = {
   uuids: string[];
-  element: SafeHtml;
+  element: TemplateRef<any>;
 };
 
-export type AnimationType = "dynamic" | "spring" | "none";
-
-export type Config = {
-  animation: AnimationType;
-  continuousMode: boolean;
-};
-
-export type SwapEventArray = Array<{
-  slot: string;
-  item: string | null;
-}>;
-
-export type SwapEventDataData = {
-  map: SwapEventMap;
-  array: SwapEventArray;
-  object: SwapEventObject;
-};
-
-export type SwapEventMap = Map<string, string | null>;
-
-export type SwapEventObject = Record<string, string | null>;
+export interface OmSwapEvent extends SwapEvent {
+  draggingElement?: Element | null;
+  swappedWithElement?: Element | null;
+}

@@ -1,15 +1,12 @@
-<div class="om-swapy">
-    <div class="om-swapy-invisible">
-        <ng-content></ng-content>
-    </div>
-
-    <div class="om-swapy-container" [ngClass]="styleClass" #OmSwapyContainer>
-        @for (content of swapElements; track $index) {
-        <div [attr.data-swapy-slot]="content.uuids[0]" [class]="'om-swapy-section om-swapy-section-' + $index">
-            <div [attr.data-swapy-item]="content.uuids[1]" [innerHTML]="content.element" class="om-swapy-item"
-                [class.disabled]="swapDisabled">
-            </div>
+<div class="om-swapy" [ngStyle]="style">
+  <div class="om-swapy-container" [ngClass]="styleClass" #OmSwapyContainer>
+    @for (content of swapElements(); track $index) {
+      <div [attr.data-swapy-slot]="content.uuids[0]" [class]="'om-swapy-section om-swapy-section-' + $index">
+        <div [attr.data-swapy-item]="content.uuids[1]" class="om-swapy-item"
+             [class.disabled]="swapDisabled">
+          <ng-container *ngTemplateOutlet="content.element; context: { index: $index }"></ng-container>
         </div>
-        }
-    </div>
+      </div>
+    }
+  </div>
 </div>

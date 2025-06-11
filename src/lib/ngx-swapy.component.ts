@@ -1,7 +1,6 @@
 import {CommonModule} from "@angular/common";
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
   ContentChildren,
   ElementRef,
@@ -10,11 +9,12 @@ import {
   OnDestroy,
   Output,
   QueryList,
+  signal,
+  TemplateRef,
   ViewChild,
 } from "@angular/core";
-import {Config, SwapEventDataData, SwapyApi, SwapyContentElement,} from "./ngx-swapy.types";
-import {createSwapy} from "swapy";
-import {DomSanitizer} from "@angular/platform-browser";
+import {OmSwapEvent, SwapyContentElement,} from "./ngx-swapy.types";
+import {Config, createSwapy, SwapEndEvent, SwapStartEvent, Swapy} from "swapy";
 
 @Component({
   selector: "om-swapy",
@@ -36,54 +36,72 @@ export class NgxSwapyComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  swapDisabled = false;
+
   @Input("swapyConfig")
   swapyConfig: Config = {
     animation: "dynamic",
-    continuousMode: true,
+    swapMode: "hover",
+    enabled: true,
+    dragOnHold: false,
+    autoScrollOnDrag: true,
+    dragAxis: "both",
+    manualSwap: true,
   };
 
-  swapDisabled = false;
-
-  @Output("onSwap") onSwap = new EventEmitter<SwapEventDataData>();
-
-  @ViewChild("OmSwapyContainer") containerRef!: ElementRef<HTMLElement>;
-  @ContentChildren("OmSwapyContent") swapElementRefs?: QueryList<
-    ElementRef<HTMLElement>
-  >;
-
-  swapElements: SwapyContentElement[] = [];
-
-  private swapyApi?: SwapyApi;
-
-  private domChangeObserver?: MutationObserver;
-
-  constructor(
-    private readonly sanitizer: DomSanitizer,
-    private readonly changeDetectorRef: ChangeDetectorRef,
-  ) {
-  }
-
-  ngAfterViewInit(): void {
-    if (!this.swapElementRefs) {
+  @Input("templateColumns")
+  set templateColumns(templateColumns: string) {
+    if (!templateColumns && templateColumns.length <= 0) {
+      this.style["--om-swapy-template-columns"] = "1fr 1fr 1fr";
       return;
     }
 
-    this.swapElements = this.swapElementRefs?.toArray().map((ref) => {
+    this.style["--om-swapy-template-columns"] = templateColumns;
+  }
+
+  @Input("gridGap")
+  set gridGap(gridGap: string) {
+    if (!gridGap && gridGap.length <= 0) {
+      this.style["--om-swapy-gap"] = "1rem";
+      return;
+    }
+
+    this.style["--om-swapy-gap"] = gridGap;
+  }
+
+  style: any = {};
+
+  @Output("onSwapStart") onSwapStart = new EventEmitter<SwapStartEvent>();
+  @Output("onSwap") onSwap = new EventEmitter<OmSwapEvent>();
+  @Output("onSwapEnd") onSwapEnd = new EventEmitter<SwapEndEvent>();
+
+  @ViewChild("OmSwapyContainer") containerRef!: ElementRef<HTMLElement>;
+
+  @ContentChildren(TemplateRef) templates!: QueryList<TemplateRef<any>>;
+
+  swapElements = signal<SwapyContentElement[]>([]);
+
+  private swapyApi?: Swapy;
+
+  private domChangeObserver?: MutationObserver;
+
+  ngAfterViewInit(): void {
+    if (!this.templates) {
+      return;
+    }
+
+    this.swapElements.set(this.templates?.toArray().map((template) => {
       return {
         uuids: [this.generateUUID(), this.generateUUID()],
-        element: this.sanitizer.bypassSecurityTrustHtml(
-          ref.nativeElement.outerHTML,
-        ),
+        element: template
       };
-    });
+    }));
 
     this.domChangeObserver = new MutationObserver(() => this.initSwapy());
 
     this.domChangeObserver.observe(this.containerRef.nativeElement, {
       childList: true,
     });
-
-    this.changeDetectorRef.detectChanges();
   }
 
   ngOnDestroy(): void {
@@ -105,9 +123,23 @@ export class NgxSwapyComponent implements AfterViewInit, OnDestroy {
 
     this.swapyApi.enable(!this.swapDisabled);
 
+    this.swapyApi.onSwapStart((event) => {
+      this.onSwapStart.emit(event);
+    });
+
     this.swapyApi.onSwap((event) => {
-      const data = event.data as unknown as SwapEventDataData;
+      const draggingItemElement = this.containerRef.nativeElement.querySelector(`[data-swapy-item="${event.draggingItem}"]`);
+      const swappedWithItemElement = this.containerRef.nativeElement.querySelector(`[data-swapy-item="${event.swappedWithItem}"]`);
+
+      const data = event as OmSwapEvent;
+      data.draggingElement = draggingItemElement;
+      data.swappedWithElement = swappedWithItemElement;
+
       this.onSwap.emit(data);
+    });
+
+    this.swapyApi.onSwapEnd((event) => {
+      this.onSwapEnd.emit(event);
     });
   }
 

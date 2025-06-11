@@ -44,6 +44,8 @@ import {NgxSwapyComponent} from '@omnedia/ngx-swapy';
 
 Use the component in your template:
 
+### Version 1.\*.\* - 2.\*.\*
+
 ```html
 
 <om-swapy [swapyConfig]="{ animation: 'dynamic', continuousMode: true }" [disableSwap]="false" styleClass="custom-swapy">
@@ -59,6 +61,29 @@ Use the component in your template:
 </om-swapy>
 ```
 
+### Version 3.\*.\*
+
+```html
+
+<om-swapy [swapyConfig]="{ animation: 'dynamic', continuousMode: true }" [disableSwap]="false" styleClass="custom-swapy">
+  <ng-template>
+    <div class="card">
+      Content 1
+    </div>
+  </ng-template>
+  <ng-template>
+    <div class="card">
+      Content 2
+    </div>
+  </ng-template>
+  <ng-template>
+    <div class="card">
+      Content 3
+    </div>
+  </ng-template>
+</om-swapy>
+```
+
 ## How It Works
 
 - Global Styling: The `.om-swapy-container` and `.om-swapy-section` elements are styled globally within the application, and additional styles can be applied using the styleClass input.
@@ -71,12 +96,16 @@ In this example, the custom-swapy style class is used to customize the appearanc
 ```html
 
 <om-swapy styleClass="swapy-container" [disableSwap]="false">
-  <div class="section-a" #OmSwapyContent>
-    Section A
-  </div>
-  <div class="section-b" #OmSwapyContent>
-    Section B
-  </div>
+  <ng-template>
+    <div class="section-a">
+      Section A
+    </div>
+  </ng-template>
+  <ng-template>
+    <div class="section-b">
+      Section B
+    </div>
+  </ng-template>
 </om-swapy>
 ```
 
@@ -119,7 +148,11 @@ In this example, the custom-swapy style class is used to customize the appearanc
 <om-swapy
   [swapyConfig]="swapyConfig"
   [disableSwap]="disableSwap"
+  [templateColumns]="templateColumns"
+  [gridGap]="gridGap"
+  (onSwapStart)="handleSwapStart($event)"
   (onSwap)="handleSwap($event)"
+  (onSwapEnd)="handleSwapEnd($event)"
   styleClass="custom-class"
 >
   <ng-content></ng-content>
@@ -129,19 +162,32 @@ In this example, the custom-swapy style class is used to customize the appearanc
 - `swapyConfig` (optional): Configuration for the swap animation, including the animation type ('dynamic', 'spring', 'none') and whether continuous mode is enabled (true or false).
 - `disableSwap` (optional): A boolean to enable or disable swapping. When true, the swapping functionality is disabled.
 - `styleClass` (optional): Custom CSS class to apply to the .om-swapy-container for additional styling.
+- `templateColumns` (optional): Css styling for the grid template columns.
+- `gridGap` (optional): Css styling for the grid gap.
+- `onSwapStart` (optional): Event that emits data every time a swap starts.
 - `onSwap` (optional): Event that emits data every time a swap occurs.
+- `onSwapEnd` (optional): Event that emits data every time a swap ends.
 
 ## Example
 
 ```html
 
-<om-swapy [swapyConfig]="{ animation: 'spring', continuousMode: false }" (onSwap)="onSwapEvent($event)">
-  <div class="card" #OmSwapyContent>
-    Card 1
-  </div>
-  <div class="card" #OmSwapyContent>
-    Card 2
-  </div>
+<om-swapy
+  [swapyConfig]="{ animation: 'spring' }"
+  [templateColumns]="'1fr 1fr'"
+  [gridGap]="'2rem'"
+  (onSwap)="onSwapEvent($event)"
+>
+  <ng-template>
+    <div class="card">
+      Card 1
+    </div>
+  </ng-template>
+  <ng-template>
+    <div class="card">
+      Card 2
+    </div>
+  </ng-template>
 </om-swapy>
 ```
 
