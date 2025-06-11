@@ -46,7 +46,7 @@ export class NgxSwapyComponent implements AfterViewInit, OnDestroy {
     dragOnHold: false,
     autoScrollOnDrag: true,
     dragAxis: "both",
-    manualSwap: true,
+    manualSwap: false,
   };
 
   @Input("templateColumns")
